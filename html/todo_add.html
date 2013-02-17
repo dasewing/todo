@@ -1,0 +1,18 @@
+﻿<div class="todo_add" >
+	<form onsubmit="base.eval_func('systemTodo.todo_add'); return false;">
+		<input id="todo_id" name="todo_id" type="hidden" />
+		<div>
+			<input id="title" name="title" type="text" size="25" />
+			<select id="type" name="type" >
+				<option value="todo" >todo</option>
+				<option value="reminder" >reminder</option>
+				<option value="note" >note</option>
+			</select>
+		</div>
+		<div><textarea id="content" name="content" ></textarea></div>
+		<div class="button-list">
+			<input class="button" value="OK" type="submit" />
+			<!-- <input class="button" value="Reset" type="reset" /> -->
+		</div>
+	</form>
+</div>

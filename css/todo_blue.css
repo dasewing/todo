@@ -1,0 +1,30 @@
+﻿/* todo-list */
+dl.todo_list {
+	margin-left:12px;
+	margin-right: 8px;
+	margin-top: 0px;
+}
+dl.todo_list dt {
+	background-color: #E1EDFB;
+	border-bottom:1px dashed #E1EDFB;
+	padding: 2px 5px 2px 8px;
+	font-weight: bold;
+	font-size: 12px;
+	margin-top: 10px;
+	colro: #fff;
+}
+dl.todo_list dt span {
+	cursor: pointer;
+}
+dl.todo_list dt span.no {
+	font-size: 8px;
+	color: #aaa;
+}
+dl.todo_list dd {
+	margin: 0;
+	padding: 5px 15px;
+	border: 1px solid #E1EDFB;
+	border-top: none;
+	font-size: 12px;
+	font-family: verdana;
+}

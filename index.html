@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html >
+<head>
+<title> 日志系统 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Generator" content="EditPlus">
+<meta name="Author" content="Jobui - daVid">
+<link rel="shortcut icon" href="http://www.dasewing.com/todos/favicon_todo_16.ico" type="image/x-icon" /> 
+<link rel="icon" href="http://www.dasewing.com/todos/favicon_todo_16.ico" type="image/x-icon" /> 
+<link rel="stylesheet" rev="stylesheet" href="css/common.css" type="text/css" media="all" />
+<link id="main_stylesheet" rel="stylesheet" rev="stylesheet" href="css/todo_gray.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="css/thickbox.css" type="text/css" media="all" />
+<script type="text/javascript" src="javascript/lib/jquery.js"></script>
+<script type="text/javascript" src="javascript/lib/jquery.thickbox.js"></script>
+<script type="text/javascript" src="javascript/base.loader.js"></script>
+<script type="text/javascript" >
+$(function(){
+
+	$(".todo_actionbar").hide();
+	$(".todo_toolbar").hide();
+	$(".todo_sidebar").hide();
+	$(".todo_pagebar").hide();
+	$(".todo_stylebar").hide();
+	
+	$(".ajax_loading").ajaxStart(function(){
+		$(this).show();
+	}).ajaxStop(function(){
+		$(this).hide();
+	});
+	
+	if (base.eval_func("baseCookie.getCookie","name",true)) {
+		$(".logo").show();
+		$(".login").hide();
+		$(".todo_actionbar").show();
+		$(".todo_toolbar").show();
+		$(".todo_sidebar").show();
+		$(".todo_pagebar").show();
+		$(".todo_stylebar").show();
+		base.eval_func("systemTodo.getTodosData");
+		base.eval_func("systemTodo.getTodoAddForm");
+	}
+	
+	$("ul > li").mouseover(function(){
+		$(this).toggleClass("onhover");
+	}).mouseout(function(){
+		$(this).toggleClass("onhover");
+	});
+	
+	$("ul.todo_sidebar > li").click(function(){
+		$("ul.todo_sidebar > li").removeClass("onselect");
+		$(this).addClass("onselect");
+		base.eval_func("basePager.__construct");
+		base.eval_func("systemTodo.getTodosData");
+	});
+	
+	$("ul.todo_typebar > li").click(function(){
+		$("ul.todo_typebar > li").removeClass("onselect");
+		$(this).addClass("onselect");
+		base.eval_func("basePager.__construct");
+		base.eval_func("systemTodo.getTodosData");
+	});
+	
+	$("ul.todo_pagebar > li").click(function(){
+		base.eval_func("basePager.go",this.id);
+	});
+	
+	$("ul.todo_stylebar > li").click(function(){
+		base.eval_func("BaseStyle.changeStyle",this.id.replace("style_",""));
+		$("ul.todo_stylebar > li").removeClass("onselect");
+		$(this).addClass("onselect");
+	});
+	
+	var nowStyle = base.eval_func("baseCookie.getCookie","style",true) || "gray";
+	base.eval_func("BaseStyle.changeStyle",nowStyle);
+	$("ul.todo_stylebar > li#style_"+nowStyle).addClass("onselect");
+	base.eval_func("systemUser.showSlogan");
+});
+
+</script>
+</head>
+<body class="index_body">
+	
+	<div class="logo hidden">
+		<!--<img src="img/logo_hx_small.png" border="0" onclick="base.eval_func('BaseStyle.changeLogo')" />-->
+		<strong></strong>：<span onclick="base.eval_func('systemUser.editSlogan');"></span>
+	</div>
+	
+	<div class="login">
+		<form onsubmit="base.eval_func('systemUser.login'); return false;">
+			<p>登录名称:<input class="text" type="text" name="lname" value="" /></p>
+			<p>登录密码:<input class="text" type="password" name="lpass" value="" /></p>
+			<p><input class="button" type="submit" value=" 登 录 " /></p>
+			<p>还没有账号，<a href="javascript: //" onclick="base.eval_func('BaseStyle.toggleTwoElem','.login','.register');">点击注册</a>一个吧～</p>
+		</form >
+	</div>
+	
+	<div class="register hidden">
+		<form onsubmit="base.eval_func('systemUser.register'); return false;">
+			<p>登录名称:<input class="text" type="text" name="rname" value="" /></p>
+			<p>登录密码:<input class="text" type="password" name="rpass" value="" /></p>
+			<p>您的昵称:<input class="text" type="text" name="rnick" value="" /></p>
+			<input class="button" type="submit" value=" 注 册 " />
+			<p>已有账号，<a href="javascript: //" onclick="base.eval_func('BaseStyle.toggleTwoElem','.login','.register');">点击登录</a></p>
+		</form >
+	</div>
+	
+	<ul class="todo_actionbar" >
+		<li id="exit" onclick="base.confi();"><span class="virual_button red">退</span></li>
+	</ul>
+	
+	<ul class="todo_toolbar" >
+		<li onclick='tb_show("Add Todo~s","#TB_inline?height=400&width=300&inlineId=add_layer&modal=false",false);' ><span class="virual_button">加</span></li>
+		<li onclick="base.eval_func('systemTodo.todo_close');" ><span class="virual_button">结</span></li>
+		<li onclick="base.eval_func('systemTodo.todo_del');" ><span class="virual_button">删</span></li>
+	</ul>
+	
+	<ul class="todo_sidebar">
+		<li id="run" class="onselect" title="显示执行中的">执</li>
+		<li id="finish" title="显示已完成的">终</li>
+		<li id="del" title="显示已丢弃的">弃</li>
+	</ul>
+	
+	<ul class="todo_typebar">
+		<li id="todo" class="onselect" title="显示todo">T</li>
+		<li id="reminder" title="显示reminder">R</li>
+		<li id="note" title="显示note">N</li>
+	</ul>
+	
+	<ul class="todo_pagebar">
+		<li id="first" title="first page">∩</li>
+		<li id="previous" title="previous page">∧</li>
+		<li id="now" title="now page"> </li>
+		<li id="next" title="next page">∨</li>
+		<li id="last" title="last page">∪</li>
+	</ul>
+	
+	<ul class="todo_stylebar" >
+		<li id="style_simple">简</li>
+		<li id="style_gray">灰</li>
+		<li id="style_blue">蓝</li>
+		<li id="style_orange">橙</li>
+		<li id="style_metal">金</li>
+	</ul>
+	
+	<div id="add_layer" >
+	</div>
+	
+	<dl class="todo_list">
+	</dl>
+	
+	<div class="ajax_loading" >Loading.......</div>
+
+	<div id="confirm_layer">
+			<div class="confirm_layer">
+				<input type="button" id="del_ok" value="OK" onClick="base.eval_func('systemUser.exit')" />　
+				<input type="button" value="Cancel" onclick="tb_remove();" />	
+			</div>
+	</div>
+
+</body>
+</html>
